@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <title>AutoNote</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Sherpa-ONNX WebAssembly Loaders -->
+  <script>
+    // Defining global Module for Emscripten
+    window.Module = {
+      locateFile: function (path, scriptDirectory) {
+        if (path.endsWith('.data')) {
+          return '/sherpa/' + path;
+        }
+        if (path.endsWith('.wasm')) {
+          return '/sherpa/' + path;
+        }
+        return scriptDirectory + path;
+      },
+      setStatus: function (status) {
+        // You can dispatch a custom event here to let React know about the loading progress if needed
+        window.dispatchEvent(new CustomEvent('sherpa-status', { detail: status }));
+      },
+      onRuntimeInitialized: function () {
+        console.log('Sherpa-ONNX Runtime initialized');
+        window.Module.isReady = true;
+        window.dispatchEvent(new Event('sherpa-ready'));
+      }
+    };
+  </script>
+  <script src="/sherpa/sherpa-onnx-asr.js"></script>
+  <script src="/sherpa/sherpa-onnx-wasm-main-asr.js"></script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

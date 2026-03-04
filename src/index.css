@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --md-sys-color-primary: #006493;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #cbe6ff;
+  --md-sys-color-on-primary-container: #001e30;
+
+  --md-sys-color-surface: #fdfcff;
+  --md-sys-color-on-surface: #1a1c1e;
+  --md-sys-color-surface-variant: #e0e2e5;
+  --md-sys-color-on-surface-variant: #43474e;
+
+  --surface-glass: rgba(253, 252, 255, 0.7);
+}
+
+@theme {
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-surface-glass: var(--surface-glass);
+
+  --font-sans: 'Google Sans', 'Inter', system-ui, sans-serif;
+  --font-handwritten: 'Caveat', 'Kalam', cursive;
+
+  --radius-xl: 24px;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans;
+    background-image: radial-gradient(var(--md-sys-color-surface-variant) 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --md-sys-color-primary: #8dcdff;
+      --md-sys-color-on-primary: #00344f;
+      --md-sys-color-primary-container: #004b70;
+      --md-sys-color-on-primary-container: #cbe6ff;
+
+      --md-sys-color-surface: #1a1c1e;
+      --md-sys-color-on-surface: #e3e2e6;
+      --md-sys-color-surface-variant: #43474e;
+      --md-sys-color-on-surface-variant: #c4c6c9;
+
+      --surface-glass: rgba(26, 28, 30, 0.7);
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-glass backdrop-blur-md border border-white/20;
+  }
+}
