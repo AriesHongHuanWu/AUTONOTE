@@ -4,6 +4,7 @@ import { Settings, Download, Trash2, Wand2, Copy } from 'lucide-react';
 import { SettingsModal } from './SettingsModal';
 import { useStore } from '../store/useStore';
 import { synthesizeNoteWithGemini, synthesizeNoteWithServer } from '../lib/gemini';
+import { synthesizeNoteWithLocalModel } from '../lib/webllm';
 
 interface LayoutProps {
     children: ReactNode;
@@ -25,6 +26,8 @@ export function Layout({ children }: LayoutProps) {
         setActiveTab
     } = useStore();
 
+    const [loadingText, setLoadingText] = useState("Synthesizing...");
+
     const handleSynthesize = async () => {
         if (!aiCorrectionsEnabled) return alert("AI corrections are disabled.");
 
@@ -42,9 +45,14 @@ export function Layout({ children }: LayoutProps) {
         if (!fullTranscript.trim()) return;
 
         setIsSynthesizing(true);
+        setLoadingText("Synthesizing...");
         try {
             let synthesized = '';
-            if (apiMode === 'server') {
+            if (apiMode === 'local') {
+                synthesized = await synthesizeNoteWithLocalModel(fullTranscript, (progress) => {
+                    setLoadingText(progress.text);
+                });
+            } else if (apiMode === 'server') {
                 synthesized = await synthesizeNoteWithServer(fullTranscript, serverApiUrl);
             } else {
                 synthesized = await synthesizeNoteWithGemini(fullTranscript, apiKey);
@@ -107,11 +115,11 @@ export function Layout({ children }: LayoutProps) {
                         <button
                             onClick={handleSynthesize}
                             disabled={isSynthesizing}
-                            className="px-4 py-2 bg-primary/10 text-primary font-medium rounded-full hover:bg-primary/20 transition-colors flex items-center gap-2"
+                            className="px-4 py-2 bg-primary/10 text-primary font-medium rounded-full hover:bg-primary/20 transition-colors flex items-center gap-2 max-w-[300px]"
                             aria-label="Synthesize Note"
                         >
-                            <Wand2 size={16} />
-                            {isSynthesizing ? "Synthesizing..." : "Synthesize Note"}
+                            <Wand2 size={16} className="shrink-0" />
+                            <span className="truncate">{isSynthesizing ? loadingText : "Synthesize Note"}</span>
                         </button>
                     )}
 

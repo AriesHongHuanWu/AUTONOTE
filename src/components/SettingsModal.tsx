@@ -42,18 +42,33 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                     className={`flex-1 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors ${apiMode === 'custom' ? 'bg-surface shadow-sm text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     onClick={() => setApiMode('custom')}
                                 >
-                                    Custom API Key
+                                    API Key
                                 </button>
                                 <button
                                     className={`flex-1 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors ${apiMode === 'server' ? 'bg-surface shadow-sm text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     onClick={() => setApiMode('server')}
                                 >
-                                    Server API
+                                    Server
+                                </button>
+                                <button
+                                    className={`flex-1 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors ${apiMode === 'local' ? 'bg-surface shadow-sm text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
+                                    onClick={() => setApiMode('local')}
+                                >
+                                    Local AI
                                 </button>
                             </div>
                         </div>
 
-                        {apiMode === 'custom' ? (
+                        {apiMode === 'local' ? (
+                            <div className="animate-in fade-in duration-200 bg-primary/10 p-4 rounded-xl border border-primary/20">
+                                <h3 className="text-sm font-semibold text-primary mb-2">100% Private & Offline</h3>
+                                <p className="text-xs text-on-surface-variant leading-relaxed">
+                                    Notes will be synthesized entirely on your device using WebGPU and a local Llama-3 model.
+                                    <br /><br />
+                                    <strong>Note:</strong> The first time you generate a note, your browser will download a ~1.5GB AI model. Subsequent generations will be instant and require zero internet connection.
+                                </p>
+                            </div>
+                        ) : apiMode === 'custom' ? (
                             <div className="animate-in fade-in duration-200">
                                 <label htmlFor="apiKey" className="block text-sm font-medium mb-2 text-on-surface-variant">
                                     Google Gemini API Key

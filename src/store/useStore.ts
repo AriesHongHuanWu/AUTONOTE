@@ -20,8 +20,8 @@ interface AppState {
     aiCorrectionsEnabled: boolean;
     setAiCorrectionsEnabled: (enabled: boolean) => void;
 
-    apiMode: 'custom' | 'server';
-    setApiMode: (mode: 'custom' | 'server') => void;
+    apiMode: 'custom' | 'server' | 'local';
+    setApiMode: (mode: 'custom' | 'server' | 'local') => void;
 
     serverApiUrl: string;
     setServerApiUrl: (url: string) => void;
@@ -61,7 +61,7 @@ export const useStore = create<AppState>((set) => ({
     aiCorrectionsEnabled: true,
     setAiCorrectionsEnabled: (enabled) => set({ aiCorrectionsEnabled: enabled }),
 
-    apiMode: (localStorage.getItem('api_mode') as 'custom' | 'server') || 'custom',
+    apiMode: (localStorage.getItem('api_mode') as 'custom' | 'server' | 'local') || 'custom',
     setApiMode: (mode) => {
         localStorage.setItem('api_mode', mode);
         set({ apiMode: mode });
