@@ -17,7 +17,6 @@
   <div id="root"></div>
   <!-- Sherpa-ONNX WebAssembly Loaders -->
   <script>
-    // Defining global Module for Emscripten
     window.Module = {
       locateFile: function (path, scriptDirectory) {
         if (path.endsWith('.data')) {
@@ -29,8 +28,25 @@
         return scriptDirectory + path;
       },
       setStatus: function (status) {
-        // You can dispatch a custom event here to let React know about the loading progress if needed
-        window.dispatchEvent(new CustomEvent('sherpa-status', { detail: status }));
+        if (!status) return;
+
+        let displayStatus = status;
+
+        // Emscripten default status texts look like: "Downloading data... (12345/67890)"
+        const match = status.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+        if (match) {
+          const loaded = parseInt(match[2]);
+          const total = parseInt(match[4]);
+          const percent = ((loaded / total) * 100).toFixed(1);
+          displayStatus = `Downloading AI Model... ${percent}%`;
+        }
+
+        window.dispatchEvent(new CustomEvent('sherpa-status', { detail: displayStatus }));
+      },
+      totalDependencies: 0,
+      monitorRunDependencies: function (left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        window.Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
       },
       onRuntimeInitialized: function () {
         console.log('Sherpa-ONNX Runtime initialized');
