@@ -21,10 +21,10 @@
     window.Module = {
       locateFile: function (path, scriptDirectory) {
         if (path.endsWith('.data')) {
-          return '/sherpa/' + path;
+          return 'https://cdn.jsdelivr.net/gh/k2-fsa/sherpa-onnx@v1.12.28/wasm/build-wasm-simd-zh-en-asr-zipformer/' + path;
         }
         if (path.endsWith('.wasm')) {
-          return '/sherpa/' + path;
+          return 'https://cdn.jsdelivr.net/gh/k2-fsa/sherpa-onnx@v1.12.28/wasm/build-wasm-simd-zh-en-asr-zipformer/' + path;
         }
         return scriptDirectory + path;
       },
@@ -39,8 +39,11 @@
       }
     };
   </script>
-  <script src="/sherpa/sherpa-onnx-asr.js"></script>
-  <script src="/sherpa/sherpa-onnx-wasm-main-asr.js"></script>
+  <!-- Fetch Sherpa-ONNX from Official CDN release branch -->
+  <script
+    src="https://cdn.jsdelivr.net/gh/k2-fsa/sherpa-onnx@v1.12.28/wasm/build-wasm-simd-zh-en-asr-zipformer/sherpa-onnx-asr.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/k2-fsa/sherpa-onnx@v1.12.28/wasm/build-wasm-simd-zh-en-asr-zipformer/sherpa-onnx-wasm-main-asr.js"></script>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
